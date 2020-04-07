@@ -12,10 +12,11 @@ module.exports = {
       .offset((page - 1) * 5)
       .select([
         "incidents.*",
+        "ongs.name",
         "ongs.email",
         "ongs.whatsapp",
         "ongs.city",
-        "ongs.uf"
+        "ongs.uf",
       ]);
 
     const countPage = count["count(*)"] / 5;
@@ -32,7 +33,7 @@ module.exports = {
       title,
       description,
       value,
-      ong_id
+      ong_id,
     });
 
     const id = result[0];
@@ -50,13 +51,11 @@ module.exports = {
 
     if (result.ong_id !== ong_id)
       return response.status(401).json({
-        error: "Operation not permitted."
+        error: "Operation not permitted.",
       });
 
-    await connection("incidents")
-      .where("id", id)
-      .delete();
+    await connection("incidents").where("id", id).delete();
 
     return response.status(204).send();
-  }
+  },
 };
